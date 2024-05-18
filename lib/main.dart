@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lesson_001_flutter_stack/home_page.dart';
-import 'package:lesson_001_flutter_stack/result_page.dart';
 
 void main() {
   runApp(const App());
@@ -16,7 +15,7 @@ class App extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: const Text('Флаттер Блок',
+            title: const Text('Разноцветные шары',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,

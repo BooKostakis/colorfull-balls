@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lesson_001_flutter_stack/main.dart';
 import 'package:lesson_001_flutter_stack/rainbow_stack.dart';
 
 class ResultPage extends StatelessWidget {
@@ -10,11 +11,23 @@ class ResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromRGBO(0, 58, 106, 1)),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => App()),
+            );
+          },
+          child: Text('Хочу еще!', style: TextStyle(color: Colors.white))),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 5, 46, 65),
-        title: const Text('Результат',
+        title: const Text('Вот что получилось!',
             style: TextStyle(color: Colors.white, fontSize: 20)),
       ),
       body: ListView.builder(
@@ -27,13 +40,16 @@ class ResultPage extends StatelessWidget {
                 (index) => Center(
                       child: Column(
                         children: [
+                          const SizedBox(
+                            height: 25,
+                          ),
                           RainbowStack(
-                              maxWidth: 250,
-                              maxHeigth: 250,
+                              maxWidth: 280,
+                              maxHeigth: 280,
                               maxBorderRadius: 200,
                               colorsQuantity: _colorQuantity),
                           const SizedBox(
-                            height: 30,
+                            height: 25,
                           ),
                         ],
                       ),

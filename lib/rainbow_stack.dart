@@ -12,13 +12,11 @@ Color randomColor() {
   );
 }
 
-final color = randomColor();
-
 class RainbowStack extends StatelessWidget {
-  double maxWidth;
-  double maxHeigth;
-  double maxBorderRadius;
-  int colorsQuantity;
+  final double maxWidth;
+  final double maxHeigth;
+  final double maxBorderRadius;
+  final int colorsQuantity;
 
   RainbowStack({
     super.key,
