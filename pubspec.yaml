@@ -1,5 +1,5 @@
-name: lesson_001_flutter_stack
-description: "A new Flutter project."
+name: colorful_baloon_bloc
+description: "bloc, random, go_router, theme, freezed"
 
 publish_to: 'none' 
 

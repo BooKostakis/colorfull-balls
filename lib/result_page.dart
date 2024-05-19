@@ -1,12 +1,10 @@
+import 'package:colorful_baloon_bloc/bloc/baloon_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:lesson_001_flutter_stack/main.dart';
-import 'package:lesson_001_flutter_stack/rainbow_stack.dart';
+import 'package:colorful_baloon_bloc/rainbow_stack.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ResultPage extends StatelessWidget {
-  final int _ballsQuantity;
-  final int _colorQuantity;
-
-  const ResultPage(this._ballsQuantity, this._colorQuantity, {super.key});
+  const ResultPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +13,7 @@ class ResultPage extends StatelessWidget {
           style: ElevatedButton.styleFrom(
               backgroundColor: Color.fromRGBO(0, 58, 106, 1)),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => App()),
-            );
+            Navigator.pop(context);
           },
           child: Text('Хочу еще!', style: TextStyle(color: Colors.white))),
       floatingActionButtonLocation:
@@ -30,32 +25,39 @@ class ResultPage extends StatelessWidget {
         title: const Text('Вот что получилось!',
             style: TextStyle(color: Colors.white, fontSize: 20)),
       ),
-      body: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: _ballsQuantity, // Количество виджетов
-        itemBuilder: (context, index) {
-          return Wrap(
-            children: List.generate(
-                1, // Количество виджетов в строке
-                (index) => Center(
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          RainbowStack(
-                              maxWidth: 280,
-                              maxHeigth: 280,
-                              maxBorderRadius: 200,
-                              colorsQuantity: _colorQuantity),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                        ],
-                      ),
-                    )),
-          );
-        },
+      body: BlocBuilder<BaloonBloc, BaloonState>(
+        builder: (context, baloonState) => baloonState.maybeMap(
+          orElse: () => Text('Ошибка, данных нет!'),
+          sucsess: (baloonStateSucsess) => ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: baloonStateSucsess.ballsQuantity, // Количество виджетов
+            itemBuilder: (context, index) {
+              return Wrap(
+                children: List.generate(
+                  1, // Количество виджетов в строке
+                  (index) => Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        RainbowStack(
+                          maxWidth: 280,
+                          maxHeigth: 280,
+                          maxBorderRadius: 200,
+                          colorsQuantity: baloonStateSucsess.colorQuantity,
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

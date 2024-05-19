@@ -1,7 +1,11 @@
+import 'package:colorful_baloon_bloc/bloc/baloon_bloc.dart';
+import 'package:colorful_baloon_bloc/simple_bloc_observer.dart';
 import 'package:flutter/material.dart';
-import 'package:lesson_001_flutter_stack/home_page.dart';
+import 'package:colorful_baloon_bloc/home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
+  Bloc.observer = SimpleBlocObserver();
   runApp(const App());
 }
 
@@ -10,19 +14,25 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'lesson_005_flutter_stack',
-        home: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text('Разноцветные шары',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w400)),
-            backgroundColor: const Color.fromARGB(255, 5, 46, 65),
+    return BlocProvider<BaloonBloc>(
+      create: (context) => BaloonBloc(),
+      child: Builder(builder: (context) {
+        return MaterialApp(
+          title: 'lesson_005_flutter_stack',
+          home: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: const Text('Разноцветные шары',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w400)),
+              backgroundColor: const Color.fromARGB(255, 5, 46, 65),
+            ),
+            body: const HomePage(),
           ),
-          body: const HomePage(),
-        ));
+        );
+      }),
+    );
   }
 }
