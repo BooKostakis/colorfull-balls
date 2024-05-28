@@ -1,7 +1,10 @@
-import 'package:colorful_baloon_bloc/bloc/baloon_bloc.dart';
+import 'package:colorful_baloons/big_mistake.dart';
+import 'package:colorful_baloons/bloc/baloon_bloc.dart';
+import 'package:colorful_baloons/circle_result.dart';
+import 'package:colorful_baloons/square_result.dart';
+import 'package:colorful_baloons/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:colorful_baloon_bloc/result_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +17,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController _colorsQuantity = TextEditingController();
   TextEditingController _ballsQuantity = TextEditingController();
+  bool _isBallsSelected = false;
+  bool _isSquaresSelected = false;
 
   @override
   void dispose() {
@@ -24,94 +29,154 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        child: BlocBuilder<BaloonBloc, BaloonState>(
-            builder: (context, baloonState) {
-          baloonState.maybeMap(
-            orElse: () {
-              _colorsQuantity.text = '1';
-              _ballsQuantity.text = '1';
-            },
-            sucsess: (baloonStateSucsess) {
-              _colorsQuantity.text =
-                  baloonStateSucsess.colorQuantity.toString();
-              _ballsQuantity.text = baloonStateSucsess.ballsQuantity.toString();
-            },
-          );
-          return Column(
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: Container(
+          height: double.infinity,
+          decoration: gradient,
+        ),
+        title: Text(
+          'Разноцветные  фигуры',
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              helloText,
-              const SizedBox(height: 20),
-              colorQuantityText,
-              const SizedBox(height: 20),
+              MainTextStyle(
+                  text:
+                      'Приветствую, сейчас мы будем рисовать разноцветные фигуры'),
+              SizedBox(height: 20),
+              ColorfullRow(
+                containers: [
+                  Container(
+                    height: 20,
+                    width: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color.fromARGB(255, 1, 37, 66),
+                    ),
+                  ),
+                  Container(
+                    height: 20,
+                    width: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color.fromARGB(255, 180, 5, 5),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              MainTextStyle(
+                text:
+                    'Цвета пока выбираются случайным образом, но ты можешь выбрать количество цветов и количество фигур',
+              ),
+              SizedBox(
+                height: 20,
+              ),
               Container(
-                width: MediaQuery.of(context).size.width / 2,
+                width: MediaQuery.of(context).size.width * 0.5,
                 child: TextField(
-                  cursorColor: Color.fromRGBO(0, 58, 106, 1),
-                  textAlign: TextAlign.center,
                   controller: _colorsQuantity,
-                  maxLength: 2,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color.fromRGBO(0, 58, 106, 1), width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                    hintText: '',
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color.fromRGBO(0, 58, 106, 1), width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ballsQuantityText,
-              const SizedBox(height: 20),
-              Container(
-                width: MediaQuery.of(context).size.width / 2,
-                child: TextField(
-                  cursorColor: Color.fromRGBO(0, 58, 106, 1),
                   textAlign: TextAlign.center,
-                  controller: _ballsQuantity,
                   maxLength: 2,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
                   decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color.fromRGBO(0, 58, 106, 1), width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                    hintText: '',
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Color.fromRGBO(0, 58, 106, 1), width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    labelText: 'Количество цветов',
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: TextField(
+                  controller: _ballsQuantity,
+                  textAlign: TextAlign.center,
+                  maxLength: 2,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                  decoration: InputDecoration(
+                      alignLabelWithHint: true, labelText: 'Количество фигур'),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              MainTextStyle(
+                text: 'Выбери фигуру',
+              ),
+              CheckboxListTile(
+                title: const Text(
+                  'Шары',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 0, 50, 90),
+                      fontFamily: 'Opinion',
+                      fontSize: 18),
+                ),
+                value: _isBallsSelected,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _isBallsSelected = value!;
+                    _isSquaresSelected = !_isBallsSelected;
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: const Text(
+                  'Квадраты',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 0, 50, 90),
+                      fontFamily: 'Opinion',
+                      fontSize: 18),
+                ),
+                value: _isSquaresSelected,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _isSquaresSelected = value!;
+                    _isBallsSelected = !_isSquaresSelected;
+                  });
+                },
+              ),
+              SizedBox(
+                height: 20,
+              ),
               ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(0, 58, 106, 1),
-                  ),
-                  onPressed: () {
-                    context.read<BaloonBloc>().add(BaloonEvent.updated(
-                        colorQuantity: int.parse(_colorsQuantity.text),
-                        ballsQuantity: int.parse(_ballsQuantity.text)));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ResultPage()),
-                    );
-                  },
-                  child: Text('Рисуем, виу виу!',
-                      style: TextStyle(color: Colors.white))),
+                onPressed: (_isBallsSelected || _isSquaresSelected)
+                    ? () {
+                        context.read<BaloonBloc>().add(BaloonEvent.updated(
+                            colorQuantity:
+                                int.tryParse(_colorsQuantity.text) ?? 1,
+                            ballsQuantity:
+                                int.tryParse(_ballsQuantity.text) ?? 1));
+                        // Перенаправляем на соответствующую страницу
+                        if (_isBallsSelected) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CircleResult(), // Замените BallsPage
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SquareResult(), // Замените SquaresPage
+                            ),
+                          );
+                        }
+                      }
+                    : null, // Кнопка не нажимается, если ни один чекбокс не выбран
+                child: Text('Рисуем, виу, виу!'),
+              ),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(145, 0, 0, 1),
@@ -120,96 +185,58 @@ class _HomePageState extends State<HomePage> {
                     context.read<BaloonBloc>().add(BaloonEvent.cleared());
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResultPage()),
+                      MaterialPageRoute(builder: (context) => BigMistake()),
                     );
                   },
                   child: Text('Эту кнопку нажимать нельзя',
                       style: TextStyle(color: Colors.white))),
             ],
-          );
-        }),
+          ),
+        ),
       ),
     );
   }
 }
 
-final helloText = MainText(
-    text: 'Приветствую, cейчас мы будем \nрисовать разноцветные шары!');
+class ColorfullRow extends StatelessWidget {
+  const ColorfullRow({super.key, required this.containers});
 
-final colorQuantityText = MainText(text: 'Для начала, укажи количество цветов');
+  final List<Widget> containers;
 
-final ballsQuantityText =
-    MainText(text: 'Теперь укажи, сколько шаров мы нарисуем');
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Определяем ширину экрана
+        double screenWidth = constraints.maxWidth;
+        // Определяем количество контейнеров, которые могут поместиться в строку
+        double count = (screenWidth / 1.4) / 20;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(
+            count.toInt(),
+            (index) => containers[index % containers.length],
+          ),
+        );
+      },
+    );
+  }
+}
 
-// final colorQuantityField = MainTextField(
-//   maxLength: 2,
-//   controller: _colorsQuantity,
-//   hintText: '',
-//   borderRadius: 25,
-// );
-
-// final ballsQuantityField = MainTextField(
-//   maxLength: 2,
-//   controller: _ballsQuantity,
-//   hintText: '',
-//   borderRadius: 25,
-// );
-
-// class MainTextField extends StatelessWidget {
-//   final int maxLength;
-//   final TextEditingController controller;
-//   final String hintText;
-//   final double borderRadius;
-
-//   const MainTextField(
-//       {required this.maxLength,
-//       required this.controller,
-//       required this.hintText,
-//       required this.borderRadius,
-//       super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: MediaQuery.of(context).size.width / 2,
-//       child: TextField(
-//         cursorColor: Color.fromRGBO(0, 58, 106, 1),
-//         textAlign: TextAlign.center,
-//         controller: controller,
-//         maxLength: maxLength,
-//         inputFormatters: <TextInputFormatter>[
-//           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-//         ],
-//         decoration: InputDecoration(
-//           enabledBorder: OutlineInputBorder(
-//               borderSide:
-//                   BorderSide(color: Color.fromRGBO(0, 58, 106, 1), width: 1.0),
-//               borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
-//           hintText: hintText,
-//           focusedBorder: OutlineInputBorder(
-//               borderSide:
-//                   BorderSide(color: Color.fromRGBO(0, 58, 106, 1), width: 2.0),
-//               borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class MainText extends StatelessWidget {
+class MainTextStyle extends StatelessWidget {
   final String text;
-  MainText({required this.text, super.key});
+
+  MainTextStyle({
+    required this.text,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
+      style: Theme.of(context).textTheme.displayMedium,
       textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Color.fromRGBO(0, 58, 106, 1),
-        fontWeight: FontWeight.w500,
-        fontSize: 18,
-      ),
     );
   }
 }

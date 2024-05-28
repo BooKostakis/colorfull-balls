@@ -1,4 +1,4 @@
-name: colorful_baloon_bloc
+name: colorful_baloons
 description: "bloc, random, go_router, theme, freezed"
 
 publish_to: 'none' 
@@ -17,6 +17,8 @@ dependencies:
   freezed: ^2.5.2
   go_router: ^13.2.4
   freezed_annotation: ^2.4.1
+  google_fonts: ^6.2.1
+
 
 
 dev_dependencies:
@@ -30,3 +32,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/fonts/
+  fonts:
+    - family: BebasNeue
+      fonts: 
+        - asset: assets/fonts/BebasNeue-Regular.ttf
+        - weight: 500
+    - family: Opinion
+      fonts: 
+        - asset: assets/fonts/OpinionProCondensed-SemiBold.otf
+        - weight: 500
+

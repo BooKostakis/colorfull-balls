@@ -1,4 +1,4 @@
-package com.example.lesson_001_flutter_stack
+package com.example.colorful_baloons
 
 import io.flutter.embedding.android.FlutterActivity
 

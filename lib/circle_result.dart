@@ -1,17 +1,19 @@
-import 'package:colorful_baloon_bloc/bloc/baloon_bloc.dart';
+import 'package:colorful_baloons/bloc/baloon_bloc.dart';
+import 'package:colorful_baloons/rainbow_stack.dart';
+import 'package:colorful_baloons/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:colorful_baloon_bloc/rainbow_stack.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ResultPage extends StatelessWidget {
-  const ResultPage({super.key});
+class CircleResult extends StatelessWidget {
+  const CircleResult({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButton: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromRGBO(0, 58, 106, 1)),
+              backgroundColor: Color.fromARGB(255, 0, 50, 80)),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -19,11 +21,14 @@ class ResultPage extends StatelessWidget {
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 5, 46, 65),
+        flexibleSpace: Container(
+          height: double.infinity,
+          decoration: gradient,
+        ),
         title: const Text('Вот что получилось!',
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+            style: TextStyle(
+              color: Colors.white,
+            )),
       ),
       body: BlocBuilder<BaloonBloc, BaloonState>(
         builder: (context, baloonState) => baloonState.maybeMap(
